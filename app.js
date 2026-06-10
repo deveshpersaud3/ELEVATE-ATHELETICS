@@ -502,6 +502,9 @@ const state = {
   countdownTimer: null,
   authUser: null,
   authMode: 'login',
+  beatOn: false,
+  audioContext: null,
+  beatTimer: null,
 };
 
 const refs = {};
@@ -527,6 +530,8 @@ function cacheRefs() {
   refs.cartTotal = document.getElementById('cartTotal');
   refs.cartBadge = document.getElementById('cartBadge');
   refs.toast = document.getElementById('toast');
+  refs.beatBtn = document.getElementById('beatBtn');
+  refs.themeBtn = document.getElementById('themeBtn');
   refs.mobileMenu = document.getElementById('mobileMenu');
   refs.hamburger = document.getElementById('hamburger');
   refs.authBtn = document.getElementById('authBtn');
@@ -565,16 +570,49 @@ function init() {
   cacheRefs();
   loadCart();
   loadUser();
+  loadTheme();
   renderHomeSections();
   renderProducts();
   updateCartUI();
   updateAuthUI();
+  updateThemeUI();
   updateCountdown();
   state.countdownTimer = window.setInterval(updateCountdown, 1000);
 
   document.addEventListener('click', preventHashJump, true);
   document.addEventListener('keydown', handleGlobalKeys);
   window.addEventListener('storage', syncCartFromStorage);
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem('elevate-theme');
+  if (saved === 'light' || saved === 'dark') {
+    state.theme = saved;
+  }
+}
+
+function saveTheme() {
+  localStorage.setItem('elevate-theme', state.theme);
+}
+
+function applyTheme() {
+  if (state.theme === 'light') {
+    document.body.classList.add('light-mode');
+  } else {
+    document.body.classList.remove('light-mode');
+  }
+}
+
+function updateThemeUI() {
+  applyTheme();
+  if (!refs.themeBtn) return;
+  refs.themeBtn.textContent = state.theme === 'light' ? 'Dark Mode' : 'Light Mode';
+}
+
+function toggleTheme() {
+  state.theme = state.theme === 'light' ? 'dark' : 'light';
+  saveTheme();
+  updateThemeUI();
 }
 
 function preventHashJump(event) {
@@ -651,6 +689,128 @@ function closeAuthModalOutside(event) {
   if (event.target === refs.authModal) {
     closeAuthModal();
   }
+}
+
+function toggleBeat() {
+  if (state.beatOn) {
+    stopBeat();
+  } else {
+    startBeat();
+  }
+}
+
+function startBeat() {
+  if (!window.AudioContext && !window.webkitAudioContext) return;
+  if (!state.audioContext) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    state.audioContext = new AudioContext();
+  }
+  if (state.audioContext.state === 'suspended') {
+    state.audioContext.resume();
+  }
+
+  state.beatOn = true;
+  if (refs.beatBtn) refs.beatBtn.textContent = 'Beat On';
+  scheduleBeatPattern();
+}
+
+function stopBeat() {
+  state.beatOn = false;
+  if (refs.beatBtn) refs.beatBtn.textContent = 'Beat Off';
+  if (state.beatTimer) {
+    clearInterval(state.beatTimer);
+    state.beatTimer = null;
+  }
+}
+
+function scheduleBeatPattern() {
+  const context = state.audioContext;
+  if (!context) return;
+  const tempo = 80;
+  const intervalMs = (60 / tempo) * 1000 * 2;
+
+  if (state.beatTimer) {
+    clearInterval(state.beatTimer);
+  }
+
+  function playPattern() {
+    const startTime = context.currentTime + 0.05;
+    // kick on 1 and 3
+    playKick(startTime);
+    playKick(startTime + 0.5);
+    // snare on 2 and 4
+    playSnare(startTime + 0.75);
+    playSnare(startTime + 1.75);
+    // hi-hats on eighth notes
+    for (let i = 0; i < 8; i += 1) {
+      playHat(startTime + i * 0.25);
+    }
+  }
+
+  playPattern();
+  state.beatTimer = setInterval(() => {
+    if (!state.beatOn) return;
+    playPattern();
+  }, intervalMs);
+}
+
+function playKick(time) {
+  const ctx = state.audioContext;
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(150, time);
+  osc.frequency.exponentialRampToValueAtTime(50, time + 0.18);
+  gain.gain.setValueAtTime(1, time);
+  gain.gain.exponentialRampToValueAtTime(0.001, time + 0.18);
+  gain.gain.setTargetAtTime(0, time + 0.18, 0.02);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(time);
+  osc.stop(time + 0.2);
+}
+
+function playSnare(time) {
+  const ctx = state.audioContext;
+  if (!ctx) return;
+  const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.2, ctx.sampleRate);
+  const output = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < output.length; i += 1) {
+    output[i] = Math.random() * 2 - 1;
+  }
+  const noiseSource = ctx.createBufferSource();
+  noiseSource.buffer = noiseBuffer;
+  const noiseFilter = ctx.createBiquadFilter();
+  noiseFilter.type = 'highpass';
+  noiseFilter.frequency.setValueAtTime(1000, time);
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.9, time);
+  gain.gain.exponentialRampToValueAtTime(0.001, time + 0.18);
+  noiseSource.connect(noiseFilter);
+  noiseFilter.connect(gain);
+  gain.connect(ctx.destination);
+  noiseSource.start(time);
+  noiseSource.stop(time + 0.2);
+}
+
+function playHat(time) {
+  const ctx = state.audioContext;
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  const filter = ctx.createBiquadFilter();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(12000, time);
+  filter.type = 'highpass';
+  filter.frequency.setValueAtTime(7000, time);
+  gain.gain.setValueAtTime(0.18, time);
+  gain.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(time);
+  osc.stop(time + 0.07);
 }
 
 function switchAuthTab(mode) {
@@ -1212,6 +1372,8 @@ window.switchAuthTab = switchAuthTab;
 window.handleLogin = handleLogin;
 window.handleSignup = handleSignup;
 window.handleLogout = handleLogout;
+window.toggleTheme = toggleTheme;
+window.toggleBeat = toggleBeat;
 window.addToCart = addToCart;
 window.changeCartQty = changeCartQty;
 window.removeCartItem = removeCartItem;

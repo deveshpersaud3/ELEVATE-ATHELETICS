@@ -31,6 +31,8 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
           <span class="cart-badge" id="cartBadge">0</span>
         </button>
+        <button class="btn btn-ghost beat-btn" id="beatBtn" onclick="toggleBeat()">Beat Off</button>
+        <button class="btn btn-ghost theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
         <button class="btn btn-ghost auth-btn" id="authBtn" onclick="openAuthModal('login')">Login</button>
         <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
           <span></span><span></span><span></span>
@@ -42,6 +44,8 @@
       <a href="#" onclick="showPage('shop');toggleMobileMenu()">Shop</a>
       <a href="#" onclick="showPage('shop');filterByTag('new');toggleMobileMenu()">New Releases</a>
       <a href="#" onclick="showPage('shop');filterByTag('limited');toggleMobileMenu()">Limited Drops</a>
+      <a href="#" onclick="toggleBeat();toggleMobileMenu()">Beat On/Off</a>
+      <a href="#" onclick="toggleTheme();toggleMobileMenu()">Light Mode</a>
       <a href="#" onclick="openAuthModal('login');toggleMobileMenu()">Login / Signup</a>
     </div>
   </nav>
