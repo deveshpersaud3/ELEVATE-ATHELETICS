@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STRIKER — Premium Streetwear</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo" onclick="showPage('home')">STR<span>IK</span>ER</a>
+
+      <ul class="nav-links">
+        <li><a href="#" onclick="showPage('home')">Home</a></li>
+        <li><a href="#" onclick="showPage('shop')">Shop</a></li>
+        <li><a href="#" onclick="showPage('shop'); filterByTag('new')">New Releases</a></li>
+        <li><a href="#" onclick="showPage('shop'); filterByTag('limited')">Limited Drops</a></li>
+        <li><a href="#" onclick="showPage('shop'); filterCat('Accessories')">Accessories</a></li>
+      </ul>
+
+      <div class="nav-right">
+        <div class="search-wrap">
+          <input type="text" id="searchInput" class="search-input" placeholder="Search products, brands…" oninput="handleSearch(this.value)" />
+          <span class="search-icon">&#9906;</span>
+        </div>
+        <button class="cart-btn" onclick="toggleCart()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span class="cart-badge" id="cartBadge">0</span>
+        </button>
+        <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#" onclick="showPage('home');toggleMobileMenu()">Home</a>
+      <a href="#" onclick="showPage('shop');toggleMobileMenu()">Shop</a>
+      <a href="#" onclick="showPage('shop');filterByTag('new');toggleMobileMenu()">New Releases</a>
+      <a href="#" onclick="showPage('shop');filterByTag('limited');toggleMobileMenu()">Limited Drops</a>
+    </div>
+  </nav>
+
+  <!-- ===================== HOME PAGE ===================== -->
+  <div id="page-home" class="page active">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="hero-content">
+        <p class="hero-eyebrow">SS 2026 COLLECTION</p>
+        <h1 class="hero-title" id="heroTitle">NEW DROPS.<br>FRESH HEAT.<br>ALWAYS AHEAD.</h1>
+        <p class="hero-sub">Premium streetwear and performance kicks — curated for those who move first.</p>
+        <div class="hero-btns">
+          <button class="btn btn-primary" onclick="showPage('shop')">Shop New Releases</button>
+          <button class="btn btn-ghost" onclick="showPage('shop')">Explore Brands</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-shoe-card">
+          <div class="shoe-img-wrap">
+            <div class="shoe-placeholder shoe-hero"></div>
+          </div>
+          <div class="shoe-tag">
+            <span class="tag-badge badge-limited">LIMITED</span>
+            <p>Air Phantom Ultra</p>
+            <p class="shoe-price">£189.99</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="ticker">
+      <div class="ticker-inner">
+        <span>FREE DELIVERY OVER £75</span><span>★</span>
+        <span>NEW NIKE AIR MAX DROPS WEEKLY</span><span>★</span>
+        <span>ADIDAS ORIGINALS — IN STOCK NOW</span><span>★</span>
+        <span>LIMITED EDITION COLLAB — DON'T SLEEP</span><span>★</span>
+        <span>NEXT DAY DELIVERY AVAILABLE</span><span>★</span>
+        <span>FREE DELIVERY OVER £75</span><span>★</span>
+        <span>NEW NIKE AIR MAX DROPS WEEKLY</span><span>★</span>
+        <span>ADIDAS ORIGINALS — IN STOCK NOW</span><span>★</span>
+        <span>LIMITED EDITION COLLAB — DON'T SLEEP</span><span>★</span>
+        <span>NEXT DAY DELIVERY AVAILABLE</span><span>★</span>
+      </div>
+    </div>
+
+    <!-- TRENDING NOW -->
+    <section class="home-section">
+      <div class="section-header">
+        <h2 class="section-title"><span class="fire">🔥</span> Trending Now</h2>
+        <a href="#" class="see-all" onclick="showPage('shop')">See All →</a>
+      </div>
+      <div class="home-grid" id="trendingGrid"></div>
+    </section>
+
+    <!-- NEW RELEASES -->
+    <section class="home-section">
+      <div class="section-header">
+        <h2 class="section-title">🆕 New Releases</h2>
+        <a href="#" class="see-all" onclick="showPage('shop');filterByTag('new')">See All →</a>
+      </div>
+      <div class="home-grid" id="newGrid"></div>
+    </section>
+
+    <!-- BRAND STRIP -->
+    <section class="brand-strip">
+      <p class="brand-strip-label">OFFICIAL STOCKIST</p>
+      <div class="brand-logos">
+        <span>NIKE</span><span>ADIDAS</span><span>ASICS</span><span>PUMA</span><span>NEW BALANCE</span>
+      </div>
+    </section>
+
+    <!-- BEST SELLERS -->
+    <section class="home-section">
+      <div class="section-header">
+        <h2 class="section-title">⭐ Best Sellers</h2>
+        <a href="#" class="see-all" onclick="showPage('shop')">See All →</a>
+      </div>
+      <div class="home-grid" id="bestGrid"></div>
+    </section>
+
+    <!-- LIMITED DROPS BANNER -->
+    <section class="limited-banner">
+      <div class="limited-inner">
+        <p class="limited-eyebrow">DON'T MISS OUT</p>
+        <h2>Limited Edition Drops</h2>
+        <p class="limited-sub">Exclusive colourways. Low stock. First come, first served.</p>
+        <button class="btn btn-primary" onclick="showPage('shop');filterByTag('limited')">Shop Limited Edition</button>
+      </div>
+      <div class="limited-countdown">
+        <p class="countdown-label">NEXT DROP IN</p>
+        <div class="countdown-digits">
+          <div><span id="cdH">04</span><small>HRS</small></div>
+          <div class="cd-sep">:</div>
+          <div><span id="cdM">27</span><small>MIN</small></div>
+          <div class="cd-sep">:</div>
+          <div><span id="cdS">00</span><small>SEC</small></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ===================== SHOP PAGE ===================== -->
+  <div id="page-shop" class="page">
+    <div class="shop-hero">
+      <h1>ALL PRODUCTS</h1>
+      <p>The full collection — filtered your way.</p>
+    </div>
+    <div class="shop-layout">
+      <!-- SIDEBAR FILTERS -->
+      <aside class="filter-sidebar" id="filterSidebar">
+        <div class="filter-header">
+          <h3>FILTERS</h3>
+          <button class="clear-filters-btn" onclick="clearAllFilters()">Clear All</button>
+        </div>
+
+        <div class="filter-group">
+          <h4>BRAND</h4>
+          <label class="filter-check"><input type="checkbox" value="Nike" onchange="toggleFilter('brand','Nike')"> Nike</label>
+          <label class="filter-check"><input type="checkbox" value="Adidas" onchange="toggleFilter('brand','Adidas')"> Adidas</label>
+          <label class="filter-check"><input type="checkbox" value="Asics" onchange="toggleFilter('brand','Asics')"> Asics</label>
+          <label class="filter-check"><input type="checkbox" value="Puma" onchange="toggleFilter('brand','Puma')"> Puma</label>
+          <label class="filter-check"><input type="checkbox" value="New Balance" onchange="toggleFilter('brand','New Balance')"> New Balance</label>
+        </div>
+
+        <div class="filter-group">
+          <h4>CATEGORY</h4>
+          <label class="filter-check"><input type="checkbox" value="Sneakers" onchange="toggleFilter('category','Sneakers')"> Sneakers</label>
+          <label class="filter-check"><input type="checkbox" value="Clothing" onchange="toggleFilter('category','Clothing')"> Clothing</label>
+          <label class="filter-check"><input type="checkbox" value="Accessories" onchange="toggleFilter('category','Accessories')"> Accessories</label>
+        </div>
+
+        <div class="filter-group">
+          <h4>TAGS</h4>
+          <label class="filter-check"><input type="checkbox" value="new" onchange="toggleFilter('tag','new')"> New Releases</label>
+          <label class="filter-check"><input type="checkbox" value="trending" onchange="toggleFilter('tag','trending')"> Trending</label>
+          <label class="filter-check"><input type="checkbox" value="sale" onchange="toggleFilter('tag','sale')"> Sale</label>
+          <label class="filter-check"><input type="checkbox" value="limited" onchange="toggleFilter('tag','limited')"> Limited Edition</label>
+        </div>
+
+        <div class="filter-group">
+          <h4>PRICE</h4>
+          <input type="range" min="0" max="300" value="300" id="priceRange" oninput="updatePriceFilter(this.value)" class="price-range" />
+          <p class="price-label">Up to: <strong id="priceLabel">£300</strong></p>
+        </div>
+      </aside>
+
+      <!-- PRODUCT AREA -->
+      <div class="shop-main">
+        <div class="shop-toolbar">
+          <p id="resultCount" class="result-count">Showing 0 products</p>
+          <select class="sort-select" onchange="sortProducts(this.value)">
+            <option value="default">Sort: Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name-asc">Name: A–Z</option>
+          </select>
+        </div>
+        <div id="searchBanner" class="search-banner hidden"></div>
+        <div class="product-grid" id="productGrid"></div>
+        <div id="noResults" class="no-results hidden">
+          <div class="no-results-icon">🔍</div>
+          <h3>No products found</h3>
+          <p>Try adjusting your filters or search term.</p>
+          <button class="btn btn-primary" onclick="clearAllFilters()">Clear Filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PRODUCT DETAIL MODAL ===================== -->
+  <div class="modal-overlay" id="productModal" onclick="closeModalOutside(event)">
+    <div class="modal-box" id="modalBox">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-inner">
+        <!-- LEFT: Images -->
+        <div class="modal-gallery">
+          <div class="modal-main-img" id="modalMainImg"></div>
+          <div class="modal-thumbs" id="modalThumbs"></div>
+        </div>
+        <!-- RIGHT: Info -->
+        <div class="modal-info">
+          <p class="modal-brand" id="modalBrand"></p>
+          <h2 class="modal-name" id="modalName"></h2>
+          <div class="modal-price-row">
+            <span class="modal-price" id="modalPrice"></span>
+            <span class="modal-stock" id="modalStock"></span>
+          </div>
+          <p class="modal-desc" id="modalDesc"></p>
+
+          <!-- COLORWAYS -->
+          <div class="modal-section">
+            <p class="modal-section-label">COLORWAY: <strong id="colorwayLabel"></strong></p>
+            <div class="colorway-swatches" id="colorSwatches"></div>
+          </div>
+
+          <!-- SIZE -->
+          <div class="modal-section">
+            <p class="modal-section-label">SIZE (UK)</p>
+            <div class="size-grid" id="sizeGrid"></div>
+            <p class="size-guide">Size Guide</p>
+          </div>
+
+          <button class="btn btn-primary btn-add-cart" id="addToCartBtn" onclick="addToCart()">Add to Cart</button>
+
+          <!-- REVIEWS -->
+          <div class="modal-reviews">
+            <div class="reviews-header">
+              <h3>Customer Reviews</h3>
+              <div class="reviews-summary">
+                <div class="stars-big" id="reviewStars"></div>
+                <span id="reviewAvg"></span>
+                <span class="reviews-count" id="reviewCount"></span>
+              </div>
+            </div>
+            <div class="reviews-list" id="reviewsList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== CART PANEL ===================== -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <div class="cart-panel" id="cartPanel">
+    <div class="cart-header">
+      <h2>YOUR BAG</h2>
+      <button class="cart-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">👟</div>
+      <p>Your bag is empty.</p>
+      <button class="btn btn-ghost" onclick="toggleCart();showPage('shop')">Start Shopping</button>
+    </div>
+    <div class="cart-footer" id="cartFooter">
+      <div class="cart-total-row">
+        <span>Subtotal</span>
+        <span id="cartTotal">£0.00</span>
+      </div>
+      <p class="cart-micro">Free delivery on orders over £75</p>
+      <button class="btn btn-primary btn-checkout">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        Secure Checkout
+      </button>
+      <p class="cart-micro centre">Fast &amp; Safe Payment · SSL Encrypted</p>
+    </div>
+  </div>
+
+  <!-- ===================== TOAST ===================== -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
