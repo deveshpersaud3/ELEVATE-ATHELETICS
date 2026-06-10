@@ -323,12 +323,79 @@ function generateProducts(count, startId) {
     Accessories: '🧢',
     Equipment: '🎒',
   };
-  const descriptors = ['Aero', 'Pulse', 'Edge', 'Core', 'Neo', 'Flux', 'Prime', 'Velocity', 'Strike', 'Shift'];
-  const productTypes = {
-    Sneakers: ['Runner', 'Court', 'Stride', 'Motion', 'Fusion', 'Sprint', 'Phantom', 'Charge', 'Retro', 'Drive'],
-    Clothing: ['Tee', 'Track Pant', 'Windbreaker', 'Hoodie', 'Crewneck', 'Jacket', 'Shorts', 'Base Layer', 'Overshirt', 'Pullover'],
-    Accessories: ['Cap', 'Pack', 'Belt', 'Sock', 'Band', 'Glove', 'Headband', 'Duffel', 'Bottle', 'Mat'],
-    Equipment: ['Mat', 'Roller', 'Bottle', 'Duffel', 'Towel', 'Holder', 'Timer', 'Strap', 'Grip', 'Cart'],
+  const brandProductCatalog = {
+    Nike: {
+      Sneakers: ['Air Zoom Elite', 'Court Legacy', 'React Sprint', 'Phantom Glide', 'Trail Rider', 'Lunar Pace', 'Element Run', 'Quest Max', 'Sprint Pro', 'Dynamo Trainer'],
+      Clothing: ['Dri-Fit Tee', 'Tech Hoodie', 'Flex Shorts', 'Training Legging', 'Aero Jacket', 'Performance Longsleeve', 'Stride Crop', 'Thermal Pullover'],
+      Accessories: ['Sport Cap', 'Training Duffel', 'Performance Sock', 'Wristband Set', 'Gym Towel', 'Water Bottle'],
+      Equipment: ['Yoga Mat', 'Recovery Roller', 'Resistance Band', 'Grip Trainer', 'Training Timer'],
+    },
+    Adidas: {
+      Sneakers: ['Ultraboost X', 'Gazelle Retro', 'NMD Runner', 'Court Master', 'Solar Pace', 'ZX Flux', 'Trail Voyager', 'Futuride', 'Adizero Swift', 'Pulse Trainer'],
+      Clothing: ['Primeknit Tee', 'AEROREADY Hoodie', 'Tiro Track Pant', 'Essentials Crewneck', 'Climalite Shorts', '3-Stripes Jacket', 'Adicolor Windbreaker'],
+      Accessories: ['Baseball Cap', 'Shoe Bag', 'Training Sock', 'Gym Belt', 'Headband', 'Hydration Bottle'],
+      Equipment: ['Foam Roller', 'Jump Rope', 'Sports Towel', 'Resistance Loop', 'Workout Mat'],
+    },
+    Puma: {
+      Sneakers: ['Arc Fusion', 'Ridge Runner', 'Legacy Court', 'Velocity Racer', 'Cali Cruiser', 'Evoke Street', 'Blaze Nitro', 'Slipstream', 'Chase Mid', 'Fast Trac'],
+      Clothing: ['Evostripe Tee', 'Luxe Hoodie', 'Motion Trackpants', 'Ignite Jacket', 'Essentials Sweatshirt', 'Sport Shorts'],
+      Accessories: ['Style Cap', 'Gear Pack', 'Lift Belt', 'Crew Sock', 'Training Band'],
+      Equipment: ['Gym Mat', 'Bottle Carrier', 'Weighted Rope', 'Stretch Strap', 'Hand Grip'],
+    },
+    Asics: {
+      Sneakers: ['Pulse Runner', 'GT-2000', 'Gel Nimbus', 'Roadhawk', 'Sky Elite', 'Dynablast', 'MetaRide', 'Torrent', 'Novablast', 'Gel Kayano'],
+      Clothing: ['Seamless Tee', 'Winter Jacket', 'Train Tight', 'Motion Short', 'Run Tank', 'Core Hoodie'],
+      Accessories: ['Run Cap', 'Compression Sock', 'Arm Sleeve', 'Hydro Bottle'],
+      Equipment: ['Stretch Band', 'Recovery Roller', 'Training Mat'],
+    },
+    'New Balance': {
+      Sneakers: ['Fresh Foam X', 'Made Fresh', 'FuelCell', 'Numeric Skate', '574 Core', '9060', '880v12', 'X-Racer', 'Rebel Run', 'Storm Runner'],
+      Clothing: ['NB Essentials Tee', 'Tech Fleece Hoodie', 'Impact Short', 'Athletic Hoodie', 'Windbreaker Shell'],
+      Accessories: ['Classic Cap', 'Performance Sock', 'Duffel Pack', 'Sport Towel'],
+      Equipment: ['Workout Mat', 'Fitness Band', 'Hydration Pack'],
+    },
+    Reebok: {
+      Sneakers: ['Nano Trainer', 'Classic Leather', 'Floatride Run', 'Zig Energy', 'Club C 85', 'Peloton Studio', 'Vital Runner'],
+      Clothing: ['Training Tank', 'CrossFit Shorts', 'Studio Hoodie', 'Speedwick Tee'],
+      Accessories: ['Gym Glove', 'Performance Band', 'Workout Towel'],
+      Equipment: ['Jump Rope', 'Exercise Ball', 'Grip Trainer'],
+    },
+    'Under Armour': {
+      Sneakers: ['HOVR Phantom', 'Charged Assert', 'Project Rock Trainer', 'Flow Velocity', 'UA Warp'],
+      Clothing: ['HeatGear Tee', 'Storm Jacket', 'Sportstyle Hoodie', 'Run Short', 'Recovery Pant'],
+      Accessories: ['Baseball Cap', 'Training Sock', 'Arm Sleeve', 'Hydration Bottle'],
+      Equipment: ['Resistance Band', 'Recovery Roller', 'Workout Mat'],
+    },
+    Fila: {
+      Sneakers: ['Disruptor', 'Ray Tracer', 'Mindblower', 'Original Tennis', 'Vault CMR'],
+      Clothing: ['Classic Tee', 'Sport Jacket', 'Track Pant', 'Heritage Hoodie'],
+      Accessories: ['Logo Cap', 'Shoe Bag', 'Crew Sock'],
+      Equipment: ['Gym Towel', 'Yoga Mat'],
+    },
+    Jordan: {
+      Sneakers: ['Air Jordan 1', 'Air Jordan 4', 'Air Jordan 11', 'Jordan Zoom', 'Jordan React'],
+      Clothing: ['Flight Hoodie', 'Legacy Tee', 'Jumpman Shorts', 'Warmup Jacket'],
+      Accessories: ['Jordan Cap', 'Shoe Bag', 'Jumpman Sock'],
+      Equipment: ['Training Mat', 'Resistance Band'],
+    },
+    Saucony: {
+      Sneakers: ['Kinvara', 'Ride', 'Endorphin', 'Guide', 'Freedom', 'Cohesion'],
+      Clothing: ['Run Tee', 'Windbreaker', 'Training Short', 'Tech Hoodie'],
+      Accessories: ['Run Sock', 'Hydration Bottle'],
+      Equipment: ['Stretch Strap', 'Recovery Roller'],
+    },
+    Columbia: {
+      Sneakers: ['Peak Sneak', 'Trail Summit', 'Outdoor Runner'],
+      Clothing: ['Omni-Heat Jacket', 'Trail Shirt', 'Hiking Pant', 'Rain Hoodie'],
+      Accessories: ['Trail Cap', 'Pack', 'Glove'],
+      Equipment: ['Camping Mat', 'Hydro Flask'],
+    },
+    'The North Face': {
+      Sneakers: ['Venture Runner', 'Trail Escape', 'Horizon Sneaker'],
+      Clothing: ['Thermo Hoodie', 'Denali Jacket', 'Base Layer Tee', 'Summit Pants'],
+      Accessories: ['Outdoor Cap', 'Neck Gaiter', 'Beanie'],
+      Equipment: ['Hiking Mat', 'Gear Tote'],
+    },
   };
   const reviewAuthors = ['Alex', 'Jamie', 'Taylor', 'Jordan', 'Morgan', 'Casey', 'Riley', 'Avery', 'Quinn', 'Skyler'];
   const reviewPhrases = [
@@ -350,13 +417,12 @@ function generateProducts(count, startId) {
     const id = startId + index;
     const brand = brands[index % brands.length];
     const category = categories[index % categories.length];
-    const descriptor = descriptors[index % descriptors.length];
-    const typeList = productTypes[category];
-    const type = typeList[index % typeList.length];
-    const name = `${descriptor} ${type} ${100 + index}`;
-    const price = Number((15 + ((index * 7) % 278) + ((index % 10) * 0.5)).toFixed(2));
+    const productList = brandProductCatalog[brand][category] || [];
+    const productName = productList[index % productList.length] || `Sport ${category}`;
+    const name = productName.includes(brand) ? productName : `${brand} ${productName}`;
+    const price = Number((20 + ((index * 11) % 260) + ((index % 5) * 2.5)).toFixed(2));
     const hasWasPrice = index % 3 !== 0;
-    const wasPrice = hasWasPrice ? Number((price + 10 + (index % 20)).toFixed(2)) : null;
+    const wasPrice = hasWasPrice ? Number((price + 8 + (index % 15)).toFixed(2)) : null;
     const colorOptions = [
       { name: 'Black', value: '#111111' },
       { name: 'White', value: '#f5f5f5' },
@@ -364,11 +430,13 @@ function generateProducts(count, startId) {
       { name: 'Navy', value: '#273c75' },
       { name: 'Red', value: '#ff2d20' },
       { name: 'Forest', value: '#1f3b2c' },
+      { name: 'Sand', value: '#d2c0a3' },
+      { name: 'Gold', value: '#d4af37' },
     ];
     const colors = [
       colorOptions[index % colorOptions.length],
       colorOptions[(index + 1) % colorOptions.length],
-      colorOptions[(index + 2) % colorOptions.length],
+      colorOptions[(index + 3) % colorOptions.length],
     ];
     const tags = [
       tagsPool[index % tagsPool.length],
