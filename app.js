@@ -500,6 +500,8 @@ const state = {
   cart: [],
   toastTimer: null,
   countdownTimer: null,
+  authUser: null,
+  authMode: 'login',
 };
 
 const refs = {};
@@ -527,6 +529,17 @@ function cacheRefs() {
   refs.toast = document.getElementById('toast');
   refs.mobileMenu = document.getElementById('mobileMenu');
   refs.hamburger = document.getElementById('hamburger');
+  refs.authBtn = document.getElementById('authBtn');
+  refs.authModal = document.getElementById('authModal');
+  refs.authTabLogin = document.getElementById('authTabLogin');
+  refs.authTabSignup = document.getElementById('authTabSignup');
+  refs.authPanelLogin = document.getElementById('authPanelLogin');
+  refs.authPanelSignup = document.getElementById('authPanelSignup');
+  refs.authAccountInfo = document.getElementById('authAccountInfo');
+  refs.authUserName = document.getElementById('authUserName');
+  refs.authUserEmail = document.getElementById('authUserEmail');
+  refs.loginError = document.getElementById('loginError');
+  refs.signupError = document.getElementById('signupError');
   refs.modalOverlay = document.getElementById('productModal');
   refs.modalMainImg = document.getElementById('modalMainImg');
   refs.modalThumbs = document.getElementById('modalThumbs');
@@ -551,9 +564,11 @@ function cacheRefs() {
 function init() {
   cacheRefs();
   loadCart();
+  loadUser();
   renderHomeSections();
   renderProducts();
   updateCartUI();
+  updateAuthUI();
   updateCountdown();
   state.countdownTimer = window.setInterval(updateCountdown, 1000);
 
@@ -573,8 +588,147 @@ function handleGlobalKeys(event) {
   if (event.key === 'Escape') {
     closeModal();
     closeCart();
+    closeAuthModal();
     closeMobileMenu();
   }
+}
+
+function loadUser() {
+  try {
+    const stored = JSON.parse(localStorage.getItem('elevate-auth'));
+    if (stored && stored.email) {
+      state.authUser = stored;
+    }
+  } catch {
+    state.authUser = null;
+  }
+}
+
+function saveUser() {
+  if (state.authUser) {
+    localStorage.setItem('elevate-auth', JSON.stringify(state.authUser));
+  }
+}
+
+function clearAuth() {
+  localStorage.removeItem('elevate-auth');
+  state.authUser = null;
+}
+
+function updateAuthUI() {
+  if (!refs.authBtn) return;
+  const signedIn = Boolean(state.authUser);
+  refs.authBtn.textContent = signedIn ? 'Account' : 'Login';
+
+  if (!refs.authPanelLogin || !refs.authPanelSignup || !refs.authAccountInfo) return;
+  refs.authPanelLogin.classList.toggle('hidden', signedIn);
+  refs.authPanelSignup.classList.toggle('hidden', signedIn);
+  refs.authAccountInfo.classList.toggle('hidden', !signedIn);
+
+  if (signedIn) {
+    refs.authUserName.textContent = state.authUser.name || 'Member';
+    refs.authUserEmail.textContent = state.authUser.email;
+  } else {
+    switchAuthTab(state.authMode);
+  }
+}
+
+function openAuthModal(mode = 'login') {
+  state.authMode = mode;
+  refs.authModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  updateAuthUI();
+}
+
+function closeAuthModal() {
+  if (refs.authModal) {
+    refs.authModal.classList.remove('open');
+  }
+  document.body.style.overflow = '';
+}
+
+function closeAuthModalOutside(event) {
+  if (event.target === refs.authModal) {
+    closeAuthModal();
+  }
+}
+
+function switchAuthTab(mode) {
+  state.authMode = mode;
+  if (!refs.authTabLogin || !refs.authTabSignup || !refs.authPanelLogin || !refs.authPanelSignup) return;
+  refs.authTabLogin.classList.toggle('active', mode === 'login');
+  refs.authTabSignup.classList.toggle('active', mode === 'signup');
+  refs.authPanelLogin.classList.toggle('hidden', mode !== 'login');
+  refs.authPanelSignup.classList.toggle('hidden', mode !== 'signup');
+  refs.authAccountInfo.classList.add('hidden');
+  if (refs.loginError) refs.loginError.textContent = '';
+  if (refs.signupError) refs.signupError.textContent = '';
+}
+
+function handleLogin(event) {
+  event.preventDefault();
+  const email = document.getElementById('loginEmail')?.value?.trim() ?? '';
+  const password = document.getElementById('loginPassword')?.value ?? '';
+  if (!email || !password) {
+    if (refs.loginError) refs.loginError.textContent = 'Enter both email and password.';
+    return;
+  }
+
+  const storedUsers = JSON.parse(localStorage.getItem('elevate-auth-users') || '[]');
+  const user = Array.isArray(storedUsers)
+    ? storedUsers.find((entry) => entry.email.toLowerCase() === email.toLowerCase() && entry.password === password)
+    : null;
+
+  if (!user) {
+    if (refs.loginError) refs.loginError.textContent = 'Invalid email or password.';
+    return;
+  }
+
+  state.authUser = { name: user.name, email: user.email };
+  saveUser();
+  updateAuthUI();
+  closeAuthModal();
+  showToast('Logged in successfully');
+}
+
+function handleSignup(event) {
+  event.preventDefault();
+  const name = document.getElementById('signupName')?.value?.trim() ?? '';
+  const email = document.getElementById('signupEmail')?.value?.trim() ?? '';
+  const password = document.getElementById('signupPassword')?.value ?? '';
+  const confirm = document.getElementById('signupConfirm')?.value ?? '';
+
+  if (!name || !email || !password || !confirm) {
+    if (refs.signupError) refs.signupError.textContent = 'Please complete every field.';
+    return;
+  }
+  if (password !== confirm) {
+    if (refs.signupError) refs.signupError.textContent = 'Passwords do not match.';
+    return;
+  }
+
+  const storedUsers = JSON.parse(localStorage.getItem('elevate-auth-users') || '[]');
+  const users = Array.isArray(storedUsers) ? storedUsers : [];
+  if (users.some((entry) => entry.email.toLowerCase() === email.toLowerCase())) {
+    if (refs.signupError) refs.signupError.textContent = 'Email already registered.';
+    return;
+  }
+
+  const newUser = { name, email, password };
+  users.push(newUser);
+  localStorage.setItem('elevate-auth-users', JSON.stringify(users));
+  state.authUser = { name, email };
+  saveUser();
+  updateAuthUI();
+  closeAuthModal();
+  showToast('Account created successfully');
+}
+
+function handleLogout() {
+  clearAuth();
+  updateAuthUI();
+  closeAuthModal();
+  showToast('Logged out');
 }
 
 function showPage(page) {
@@ -1051,6 +1205,13 @@ window.sortProducts = sortProducts;
 window.openProductModal = openProductModal;
 window.closeModal = closeModal;
 window.closeModalOutside = closeModalOutside;
+window.openAuthModal = openAuthModal;
+window.closeAuthModal = closeAuthModal;
+window.closeAuthModalOutside = closeAuthModalOutside;
+window.switchAuthTab = switchAuthTab;
+window.handleLogin = handleLogin;
+window.handleSignup = handleSignup;
+window.handleLogout = handleLogout;
 window.addToCart = addToCart;
 window.changeCartQty = changeCartQty;
 window.removeCartItem = removeCartItem;
