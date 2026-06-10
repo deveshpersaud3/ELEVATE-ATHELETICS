@@ -301,6 +301,120 @@ const products = [
   },
 ];
 
+products.push(...generateProducts(1000, products.length + 1));
+
+function generateProducts(count, startId) {
+  const brands = [
+    'Nike', 'Adidas', 'Puma', 'Asics', 'New Balance',
+    'Reebok', 'Under Armour', 'Fila', 'Jordan', 'Saucony',
+    'Columbia', 'The North Face',
+  ];
+  const categories = ['Sneakers', 'Clothing', 'Accessories', 'Equipment'];
+  const tagsPool = ['new', 'trending', 'best', 'sale', 'limited'];
+  const sizeMap = {
+    Sneakers: [6, 7, 8, 9, 10, 11, 12],
+    Clothing: ['S', 'M', 'L', 'XL', 'XXL'],
+    Accessories: ['One Size'],
+    Equipment: ['One Size'],
+  };
+  const iconMap = {
+    Sneakers: '👟',
+    Clothing: '👕',
+    Accessories: '🧢',
+    Equipment: '🎒',
+  };
+  const descriptors = ['Aero', 'Pulse', 'Edge', 'Core', 'Neo', 'Flux', 'Prime', 'Velocity', 'Strike', 'Shift'];
+  const productTypes = {
+    Sneakers: ['Runner', 'Court', 'Stride', 'Motion', 'Fusion', 'Sprint', 'Phantom', 'Charge', 'Retro', 'Drive'],
+    Clothing: ['Tee', 'Track Pant', 'Windbreaker', 'Hoodie', 'Crewneck', 'Jacket', 'Shorts', 'Base Layer', 'Overshirt', 'Pullover'],
+    Accessories: ['Cap', 'Pack', 'Belt', 'Sock', 'Band', 'Glove', 'Headband', 'Duffel', 'Bottle', 'Mat'],
+    Equipment: ['Mat', 'Roller', 'Bottle', 'Duffel', 'Towel', 'Holder', 'Timer', 'Strap', 'Grip', 'Cart'],
+  };
+  const reviewAuthors = ['Alex', 'Jamie', 'Taylor', 'Jordan', 'Morgan', 'Casey', 'Riley', 'Avery', 'Quinn', 'Skyler'];
+  const reviewPhrases = [
+    'Feels great, durable and comfortable.',
+    'Exactly what I needed for daily training.',
+    'The fit is perfect and the materials feel premium.',
+    'I appreciate the build and the style is clean.',
+    'Good value for the price and works well.',
+  ];
+  const stockStates = ['in', 'low', 'out'];
+  const stockLabelMap = {
+    in: 'In Stock',
+    low: 'Low Stock',
+    out: 'Out of Stock',
+  };
+  const products = [];
+
+  for (let index = 0; index < count; index += 1) {
+    const id = startId + index;
+    const brand = brands[index % brands.length];
+    const category = categories[index % categories.length];
+    const descriptor = descriptors[index % descriptors.length];
+    const typeList = productTypes[category];
+    const type = typeList[index % typeList.length];
+    const name = `${descriptor} ${type} ${100 + index}`;
+    const price = Number((15 + ((index * 7) % 278) + ((index % 10) * 0.5)).toFixed(2));
+    const hasWasPrice = index % 3 !== 0;
+    const wasPrice = hasWasPrice ? Number((price + 10 + (index % 20)).toFixed(2)) : null;
+    const colorOptions = [
+      { name: 'Black', value: '#111111' },
+      { name: 'White', value: '#f5f5f5' },
+      { name: 'Grey', value: '#9a9a9a' },
+      { name: 'Navy', value: '#273c75' },
+      { name: 'Red', value: '#ff2d20' },
+      { name: 'Forest', value: '#1f3b2c' },
+    ];
+    const colors = [
+      colorOptions[index % colorOptions.length],
+      colorOptions[(index + 1) % colorOptions.length],
+      colorOptions[(index + 2) % colorOptions.length],
+    ];
+    const tags = [
+      tagsPool[index % tagsPool.length],
+      tagsPool[(index + 2) % tagsPool.length],
+    ].filter((tag, idx, self) => self.indexOf(tag) === idx);
+    const featured = tags.filter((tag) => ['new', 'trending', 'best'].includes(tag));
+    const stock = stockStates[index % stockStates.length];
+    const productSizes = [...sizeMap[category]];
+    const reviews = [
+      {
+        author: reviewAuthors[index % reviewAuthors.length],
+        rating: 4 + ((index % 2) * 0.5),
+        text: reviewPhrases[index % reviewPhrases.length],
+        date: `${1 + (index % 10)} days ago`,
+      },
+      {
+        author: reviewAuthors[(index + 3) % reviewAuthors.length],
+        rating: 4 + (((index + 1) % 2) * 0.5),
+        text: reviewPhrases[(index + 2) % reviewPhrases.length],
+        date: `${2 + (index % 8)} days ago`,
+      },
+    ];
+
+    products.push({
+      id,
+      name,
+      brand,
+      category,
+      price,
+      wasPrice,
+      tags,
+      stock,
+      stockLabel: stockLabelMap[stock],
+      icon: iconMap[category] || '🛍️',
+      description: `A ${category.toLowerCase()} from ${brand} built for everyday activity and modern styling.`,
+      colors,
+      sizes: productSizes,
+      reviews,
+      gallery: [iconMap[category] || '🛍️', '✨', '🟫'],
+      featured,
+    });
+  }
+
+  return products;
+}
+
 const state = {
   currentPage: 'home',
   searchTerm: '',
