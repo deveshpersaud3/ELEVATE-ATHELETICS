@@ -32,7 +32,7 @@
           <span class="cart-badge" id="cartBadge">0</span>
         </button>
         <button class="btn btn-ghost theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
-        <button class="btn btn-ghost auth-btn" id="authBtn" onclick="openAuthModal('login')">Sign Up / Log In</button>
+        <button class="btn btn-ghost auth-btn" id="authBtn" onclick="openAuthModal('login')">Log In / Sign Up</button>
         <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
           <span></span><span></span><span></span>
         </button>
@@ -44,7 +44,7 @@
       <a href="#" onclick="showPage('shop');filterByTag('new');toggleMobileMenu()">New Releases</a>
       <a href="#" onclick="showPage('shop');filterByTag('limited');toggleMobileMenu()">Limited Drops</a>
       <a href="#" onclick="toggleTheme();toggleMobileMenu()">Light Mode</a>
-      <a href="#" onclick="openAuthModal('login');toggleMobileMenu()">Sign Up / Log In</a>
+      <a href="#" onclick="openAuthModal('login');toggleMobileMenu()">Log In / Sign Up</a>
     </div>
   </nav>
 
@@ -178,6 +178,7 @@
           <label class="filter-check"><input type="checkbox" value="Sneakers" onchange="toggleFilter('category','Sneakers')"> Sneakers</label>
           <label class="filter-check"><input type="checkbox" value="Clothing" onchange="toggleFilter('category','Clothing')"> Clothing</label>
           <label class="filter-check"><input type="checkbox" value="Accessories" onchange="toggleFilter('category','Accessories')"> Accessories</label>
+          <label class="filter-check"><input type="checkbox" value="Kids" onchange="toggleFilter('category','Kids')"> Kids</label>
         </div>
 
         <div class="filter-group">

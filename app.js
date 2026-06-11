@@ -79,8 +79,8 @@ const products = [
     name: 'Ridge Utility Pack',
     brand: 'Puma',
     category: 'Accessories',
-    price: 52.0,
-    wasPrice: 62.0,
+    price: 35.99,
+    wasPrice: 52.0,
     tags: ['limited'],
     stock: 'low',
     stockLabel: 'Few Left',
@@ -104,8 +104,8 @@ const products = [
     name: 'Streetline Cap',
     brand: 'Nike',
     category: 'Accessories',
-    price: 24.99,
-    wasPrice: 29.99,
+    price: 14.99,
+    wasPrice: 24.99,
     tags: ['sale', 'trending'],
     stock: 'in',
     stockLabel: 'In Stock',
@@ -204,8 +204,8 @@ const products = [
     name: 'Mono Run Sock',
     brand: 'Asics',
     category: 'Accessories',
-    price: 18.99,
-    wasPrice: 24.99,
+    price: 12.99,
+    wasPrice: 18.99,
     tags: ['new'],
     stock: 'in',
     stockLabel: 'In Stock',
@@ -279,8 +279,8 @@ const products = [
     name: 'Lift Training Belt',
     brand: 'Puma',
     category: 'Accessories',
-    price: 29.99,
-    wasPrice: 34.99,
+    price: 18.99,
+    wasPrice: 29.99,
     tags: ['limited', 'sale'],
     stock: 'in',
     stockLabel: 'In Stock',
@@ -303,25 +303,39 @@ const products = [
 
 products.push(...generateProducts(1000, products.length + 1));
 
+// Remove duplicate products by name, keeping the first occurrence
+const seenNames = new Set();
+const uniqueProducts = [];
+for (const product of products) {
+  if (!seenNames.has(product.name)) {
+    seenNames.add(product.name);
+    uniqueProducts.push(product);
+  }
+}
+products.length = 0;
+products.push(...uniqueProducts);
+
 function generateProducts(count, startId) {
   const brands = [
     'Nike', 'Adidas', 'Puma', 'Asics', 'New Balance',
     'Reebok', 'Under Armour', 'Fila', 'Jordan', 'Saucony',
     'Columbia', 'The North Face',
   ];
-  const categories = ['Sneakers', 'Clothing', 'Accessories', 'Equipment'];
+  const categories = ['Sneakers', 'Clothing', 'Accessories', 'Equipment', 'Kids'];
   const tagsPool = ['new', 'trending', 'best', 'sale', 'limited'];
   const sizeMap = {
     Sneakers: [6, 7, 8, 9, 10, 11, 12],
     Clothing: ['S', 'M', 'L', 'XL', 'XXL'],
     Accessories: ['One Size'],
     Equipment: ['One Size'],
+    Kids: ['2T', '3T', '4T', '5T', 'XS', 'S'],
   };
   const iconMap = {
     Sneakers: '👟',
     Clothing: '👕',
     Accessories: '🧢',
     Equipment: '🎒',
+    Kids: '🧒',
   };
   const brandProductCatalog = {
     Nike: {
@@ -395,6 +409,7 @@ function generateProducts(count, startId) {
       Clothing: ['Thermo Hoodie', 'Denali Jacket', 'Base Layer Tee', 'Summit Pants'],
       Accessories: ['Outdoor Cap', 'Neck Gaiter', 'Beanie'],
       Equipment: ['Hiking Mat', 'Gear Tote'],
+      Kids: ['Mini Denali Jacket', 'Youth Adventure Tee', 'Trail Kid Shorts', 'Summit Little Hoodie', 'Playground Sneaker'],
     },
   };
   const reviewAuthors = ['Alex', 'Jamie', 'Taylor', 'Jordan', 'Morgan', 'Casey', 'Riley', 'Avery', 'Quinn', 'Skyler'];
