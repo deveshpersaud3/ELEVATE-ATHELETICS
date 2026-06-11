@@ -17,6 +17,10 @@
   --grey1:     #999999;
   --grey2:     #555555;
   --grey3:     #333333;
+  --font-disp: 'Barlow Condensed', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --radius:    6px;
+  --trans:     all 0.22s cubic-bezier(0.4,0,0.2,1);
 }
 
 body.light-mode {
@@ -103,20 +107,22 @@ body.light-mode .btn-primary {
 body.light-mode .btn-ghost {
   background: rgba(255,255,255,0.08);
 }
-  --font-disp: 'Inter', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  --radius:    4px;
-  --trans:     all 0.22s cubic-bezier(0.4,0,0.2,1);
-}
 
 html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--white);
   font-family: var(--font-body);
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .section-title, .hero-title, .cart-item-brand, .tag-badge {
+  font-family: var(--font-disp);
 }
 
 a { text-decoration: none; color: inherit; }
