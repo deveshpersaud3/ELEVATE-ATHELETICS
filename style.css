@@ -24,9 +24,9 @@
 }
 
 body.light-mode {
-  --bg: #7a7878;
-  --bg2: #ffffff;
-  --bg3: #f0f0f0;
+  --bg: #747373;
+  --bg2: #747373;
+  --bg3: #757575;
   --bg4: #ffffff;
   --red: #FF2D20;
   --red-dark: #cc1f14;
@@ -37,7 +37,7 @@ body.light-mode {
 }
 
 body.light-mode .navbar {
-  background: rgba(155, 153, 153, 0.95);
+  background: rgba(255,255,255,0.95);
   border-color: var(--grey3);
 }
 
