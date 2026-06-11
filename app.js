@@ -301,7 +301,9 @@ const products = [
   },
 ];
 
-products.push(...generateProducts(1000, products.length + 1));
+const generated = generateProducts(1000, products.length + 1);
+products.push(...generated);
+products.push(...generateProducts(100, products.length + 1, 'Kids'));
 
 // Remove duplicate products by name, keeping the first occurrence
 const seenNames = new Set();
@@ -315,7 +317,7 @@ for (const product of products) {
 products.length = 0;
 products.push(...uniqueProducts);
 
-function generateProducts(count, startId) {
+function generateProducts(count, startId, forcedCategory = null) {
   const brands = [
     'Nike', 'Adidas', 'Puma', 'Asics', 'New Balance',
     'Reebok', 'Under Armour', 'Fila', 'Jordan', 'Saucony',
@@ -343,66 +345,77 @@ function generateProducts(count, startId) {
       Clothing: ['Dri-Fit Tee', 'Tech Hoodie', 'Flex Shorts', 'Training Legging', 'Aero Jacket', 'Performance Longsleeve', 'Stride Crop', 'Thermal Pullover'],
       Accessories: ['Sport Cap', 'Training Duffel', 'Performance Sock', 'Wristband Set', 'Gym Towel', 'Water Bottle'],
       Equipment: ['Yoga Mat', 'Recovery Roller', 'Resistance Band', 'Grip Trainer', 'Training Timer'],
+      Kids: ['Air Zoom Jr', 'Court Legacy Mini', 'React Sprint Kids', 'Phantom Glide Jr', 'Trail Rider Youth', 'Lunar Pace Kids', 'Element Run Jr', 'Quest Max Youth', 'Sprint Pro Kids', 'Dynamo Trainer Jr'],
     },
     Adidas: {
       Sneakers: ['Ultraboost X', 'Gazelle Retro', 'NMD Runner', 'Court Master', 'Solar Pace', 'ZX Flux', 'Trail Voyager', 'Futuride', 'Adizero Swift', 'Pulse Trainer'],
       Clothing: ['Primeknit Tee', 'AEROREADY Hoodie', 'Tiro Track Pant', 'Essentials Crewneck', 'Climalite Shorts', '3-Stripes Jacket', 'Adicolor Windbreaker'],
       Accessories: ['Baseball Cap', 'Shoe Bag', 'Training Sock', 'Gym Belt', 'Headband', 'Hydration Bottle'],
       Equipment: ['Foam Roller', 'Jump Rope', 'Sports Towel', 'Resistance Loop', 'Workout Mat'],
+      Kids: ['Ultraboost X Kids', 'Gazelle Retro Jr', 'NMD Runner Youth', 'Court Master Kids', 'Solar Pace Jr', 'ZX Flux Mini', 'Trail Voyager Kids', 'Futuride Jr', 'Adizero Swift Youth', 'Pulse Trainer Kids'],
     },
     Puma: {
       Sneakers: ['Arc Fusion', 'Ridge Runner', 'Legacy Court', 'Velocity Racer', 'Cali Cruiser', 'Evoke Street', 'Blaze Nitro', 'Slipstream', 'Chase Mid', 'Fast Trac'],
       Clothing: ['Evostripe Tee', 'Luxe Hoodie', 'Motion Trackpants', 'Ignite Jacket', 'Essentials Sweatshirt', 'Sport Shorts'],
       Accessories: ['Style Cap', 'Gear Pack', 'Lift Belt', 'Crew Sock', 'Training Band'],
       Equipment: ['Gym Mat', 'Bottle Carrier', 'Weighted Rope', 'Stretch Strap', 'Hand Grip'],
+      Kids: ['Arc Fusion Kids', 'Ridge Runner Jr', 'Legacy Court Mini', 'Velocity Racer Youth', 'Cali Cruiser Kids', 'Evoke Street Jr', 'Blaze Nitro Kids', 'Slipstream Youth', 'Chase Mid Jr', 'Fast Trac Kids'],
     },
     Asics: {
       Sneakers: ['Pulse Runner', 'GT-2000', 'Gel Nimbus', 'Roadhawk', 'Sky Elite', 'Dynablast', 'MetaRide', 'Torrent', 'Novablast', 'Gel Kayano'],
       Clothing: ['Seamless Tee', 'Winter Jacket', 'Train Tight', 'Motion Short', 'Run Tank', 'Core Hoodie'],
       Accessories: ['Run Cap', 'Compression Sock', 'Arm Sleeve', 'Hydro Bottle'],
       Equipment: ['Stretch Band', 'Recovery Roller', 'Training Mat'],
+      Kids: ['Pulse Runner Kids', 'GT-2000 Jr', 'Gel Nimbus Youth', 'Roadhawk Kids', 'Sky Elite Jr', 'Dynablast Kids', 'MetaRide Youth', 'Torrent Jr', 'Novablast Kids', 'Gel Kayano Jr'],
     },
     'New Balance': {
       Sneakers: ['Fresh Foam X', 'Made Fresh', 'FuelCell', 'Numeric Skate', '574 Core', '9060', '880v12', 'X-Racer', 'Rebel Run', 'Storm Runner'],
       Clothing: ['NB Essentials Tee', 'Tech Fleece Hoodie', 'Impact Short', 'Athletic Hoodie', 'Windbreaker Shell'],
       Accessories: ['Classic Cap', 'Performance Sock', 'Duffel Pack', 'Sport Towel'],
       Equipment: ['Workout Mat', 'Fitness Band', 'Hydration Pack'],
+      Kids: ['Fresh Foam X Kids', 'Made Fresh Jr', 'FuelCell Youth', 'Numeric Skate Kids', '574 Core Mini', '9060 Jr', '880v12 Kids', 'X-Racer Youth', 'Rebel Run Jr', 'Storm Runner Kids'],
     },
     Reebok: {
       Sneakers: ['Nano Trainer', 'Classic Leather', 'Floatride Run', 'Zig Energy', 'Club C 85', 'Peloton Studio', 'Vital Runner'],
       Clothing: ['Training Tank', 'CrossFit Shorts', 'Studio Hoodie', 'Speedwick Tee'],
       Accessories: ['Gym Glove', 'Performance Band', 'Workout Towel'],
       Equipment: ['Jump Rope', 'Exercise Ball', 'Grip Trainer'],
+      Kids: ['Nano Trainer Jr', 'Classic Leather Kids', 'Floatride Run Youth', 'Zig Energy Jr', 'Club C 85 Kids', 'Peloton Studio Youth', 'Vital Runner Jr'],
     },
     'Under Armour': {
       Sneakers: ['HOVR Phantom', 'Charged Assert', 'Project Rock Trainer', 'Flow Velocity', 'UA Warp'],
       Clothing: ['HeatGear Tee', 'Storm Jacket', 'Sportstyle Hoodie', 'Run Short', 'Recovery Pant'],
       Accessories: ['Baseball Cap', 'Training Sock', 'Arm Sleeve', 'Hydration Bottle'],
       Equipment: ['Resistance Band', 'Recovery Roller', 'Workout Mat'],
+      Kids: ['HOVR Phantom Kids', 'Charged Assert Jr', 'Project Rock Trainer Youth', 'Flow Velocity Kids', 'UA Warp Jr'],
     },
     Fila: {
       Sneakers: ['Disruptor', 'Ray Tracer', 'Mindblower', 'Original Tennis', 'Vault CMR'],
       Clothing: ['Classic Tee', 'Sport Jacket', 'Track Pant', 'Heritage Hoodie'],
       Accessories: ['Logo Cap', 'Shoe Bag', 'Crew Sock'],
       Equipment: ['Gym Towel', 'Yoga Mat'],
+      Kids: ['Disruptor Kids', 'Ray Tracer Jr', 'Mindblower Youth', 'Original Tennis Mini', 'Vault CMR Kids'],
     },
     Jordan: {
       Sneakers: ['Air Jordan 1', 'Air Jordan 4', 'Air Jordan 11', 'Jordan Zoom', 'Jordan React'],
       Clothing: ['Flight Hoodie', 'Legacy Tee', 'Jumpman Shorts', 'Warmup Jacket'],
       Accessories: ['Jordan Cap', 'Shoe Bag', 'Jumpman Sock'],
       Equipment: ['Training Mat', 'Resistance Band'],
+      Kids: ['Air Jordan 1 Kids', 'Air Jordan 4 Jr', 'Air Jordan 11 Youth', 'Jordan Zoom Kids', 'Jordan React Jr'],
     },
     Saucony: {
       Sneakers: ['Kinvara', 'Ride', 'Endorphin', 'Guide', 'Freedom', 'Cohesion'],
       Clothing: ['Run Tee', 'Windbreaker', 'Training Short', 'Tech Hoodie'],
       Accessories: ['Run Sock', 'Hydration Bottle'],
       Equipment: ['Stretch Strap', 'Recovery Roller'],
+      Kids: ['Kinvara Kids', 'Ride Jr', 'Endorphin Youth', 'Guide Kids', 'Freedom Jr', 'Cohesion Kids'],
     },
     Columbia: {
       Sneakers: ['Peak Sneak', 'Trail Summit', 'Outdoor Runner'],
       Clothing: ['Omni-Heat Jacket', 'Trail Shirt', 'Hiking Pant', 'Rain Hoodie'],
       Accessories: ['Trail Cap', 'Pack', 'Glove'],
       Equipment: ['Camping Mat', 'Hydro Flask'],
+      Kids: ['Peak Sneak Kids', 'Trail Summit Jr', 'Outdoor Runner Youth', 'Omni-Heat Kids Jacket', 'Playground Hoodie'],
     },
     'The North Face': {
       Sneakers: ['Venture Runner', 'Trail Escape', 'Horizon Sneaker'],
@@ -431,13 +444,24 @@ function generateProducts(count, startId) {
   for (let index = 0; index < count; index += 1) {
     const id = startId + index;
     const brand = brands[index % brands.length];
-    const category = categories[index % categories.length];
+    const category = forcedCategory || categories[index % categories.length];
     const productList = brandProductCatalog[brand][category] || [];
     const productName = productList[index % productList.length] || `Sport ${category}`;
     const name = productName.includes(brand) ? productName : `${brand} ${productName}`;
-    const price = Number((20 + ((index * 11) % 260) + ((index % 5) * 2.5)).toFixed(2));
+    let price;
+    if (category === 'Kids') {
+      price = Number((8 + ((index * 7) % 45) + ((index % 4) * 1.5)).toFixed(2));
+    } else if (category === 'Accessories') {
+      price = Number((12 + ((index * 5) % 45) + ((index % 3) * 2)).toFixed(2));
+    } else if (category === 'Clothing') {
+      price = Number((18 + ((index * 6) % 70) + ((index % 4) * 2)).toFixed(2));
+    } else if (category === 'Equipment') {
+      price = Number((20 + ((index * 9) % 75) + ((index % 4) * 2)).toFixed(2));
+    } else {
+      price = Number((35 + ((index * 8) % 100) + ((index % 5) * 3)).toFixed(2));
+    }
     const hasWasPrice = index % 3 !== 0;
-    const wasPrice = hasWasPrice ? Number((price + 8 + (index % 15)).toFixed(2)) : null;
+    const wasPrice = hasWasPrice ? Number((price + Math.max(5, index % 12 + 4)).toFixed(2)) : null;
     const colorOptions = [
       { name: 'Black', value: '#111111' },
       { name: 'White', value: '#f5f5f5' },
@@ -513,6 +537,7 @@ const state = {
   selectedSize: null,
   selectedGalleryIndex: 0,
   cart: [],
+  selectedShipping: 'pickup',
   toastTimer: null,
   countdownTimer: null,
   authUser: null,
@@ -539,6 +564,7 @@ function cacheRefs() {
   refs.cartItems = document.getElementById('cartItems');
   refs.cartEmpty = document.getElementById('cartEmpty');
   refs.cartFooter = document.getElementById('cartFooter');
+  refs.cartSubtotal = document.getElementById('cartSubtotal');
   refs.cartTotal = document.getElementById('cartTotal');
   refs.cartBadge = document.getElementById('cartBadge');
   refs.toast = document.getElementById('toast');
@@ -1179,7 +1205,10 @@ function updateCartUI() {
     </div>
   `).join('');
 
-  const total = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shipping = state.selectedShipping === 'home' ? 4.99 : 0;
+  const total = subtotal + shipping;
+  if (refs.cartSubtotal) refs.cartSubtotal.textContent = `£${subtotal.toFixed(2)}`;
   refs.cartTotal.textContent = `£${total.toFixed(2)}`;
 
   const hasItems = state.cart.length > 0;
@@ -1189,6 +1218,13 @@ function updateCartUI() {
   if (!hasItems) {
     refs.cartItems.innerHTML = '';
   }
+}
+
+function setShippingOption(option) {
+  if (option !== 'pickup' && option !== 'home') return;
+  state.selectedShipping = option;
+  updateCartUI();
+  showToast(option === 'home' ? 'Home shipping selected' : 'Pickup in store selected');
 }
 
 function showToast(message) {
@@ -1241,6 +1277,7 @@ function syncCartFromStorage(event) {
   }
 }
 
+window.setShippingOption = setShippingOption;
 window.showPage = showPage;
 window.toggleMobileMenu = toggleMobileMenu;
 window.toggleCart = toggleCart;
