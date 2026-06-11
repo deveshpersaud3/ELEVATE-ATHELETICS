@@ -301,7 +301,7 @@ const products = [
   },
 ];
 
-const generated = generateProducts(1000, products.length + 1);
+const generated = generateProducts(5000, products.length + 1);
 products.push(...generated);
 products.push(...generateProducts(100, products.length + 1, 'Kids'));
 
@@ -447,21 +447,23 @@ function generateProducts(count, startId, forcedCategory = null) {
     const category = forcedCategory || categories[index % categories.length];
     const productList = brandProductCatalog[brand][category] || [];
     const productName = productList[index % productList.length] || `Sport ${category}`;
-    const name = productName.includes(brand) ? productName : `${brand} ${productName}`;
+    const productSuffix = Math.floor(index / Math.max(productList.length, 1)) + 1;
+    const baseName = productName.includes(brand) ? productName : `${brand} ${productName}`;
+    const name = `${baseName} ${productSuffix}`;
     let price;
     if (category === 'Kids') {
-      price = Number((8 + ((index * 7) % 45) + ((index % 4) * 1.5)).toFixed(2));
+      price = Number((15 + ((index * 7) % 30)).toFixed(2));
     } else if (category === 'Accessories') {
-      price = Number((12 + ((index * 5) % 45) + ((index % 3) * 2)).toFixed(2));
+      price = Number((10 + ((index * 5) % 40)).toFixed(2));
     } else if (category === 'Clothing') {
-      price = Number((18 + ((index * 6) % 70) + ((index % 4) * 2)).toFixed(2));
+      price = Number((30 + ((index * 6) % 90)).toFixed(2));
     } else if (category === 'Equipment') {
-      price = Number((20 + ((index * 9) % 75) + ((index % 4) * 2)).toFixed(2));
+      price = Number((25 + ((index * 9) % 75)).toFixed(2));
     } else {
-      price = Number((35 + ((index * 8) % 100) + ((index % 5) * 3)).toFixed(2));
+      price = Number((70 + ((index * 8) % 110)).toFixed(2));
     }
     const hasWasPrice = index % 3 !== 0;
-    const wasPrice = hasWasPrice ? Number((price + Math.max(5, index % 12 + 4)).toFixed(2)) : null;
+    const wasPrice = hasWasPrice ? Number((price + Math.max(8, (index % 20) + 5)).toFixed(2)) : null;
     const colorOptions = [
       { name: 'Black', value: '#111111' },
       { name: 'White', value: '#f5f5f5' },
