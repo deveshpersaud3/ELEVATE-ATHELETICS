@@ -31,6 +31,8 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
           <span class="cart-badge" id="cartBadge">0</span>
         </button>
+        <button class="btn btn-ghost theme-btn" id="themeBtn" onclick="toggleTheme()">Light Mode</button>
+        <button class="btn btn-ghost auth-btn" id="authBtn" onclick="openAuthModal('login')">Log In / Sign Up</button>
         <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
           <span></span><span></span><span></span>
         </button>
@@ -41,6 +43,8 @@
       <a href="#" onclick="showPage('shop');toggleMobileMenu()">Shop</a>
       <a href="#" onclick="showPage('shop');filterByTag('new');toggleMobileMenu()">New Releases</a>
       <a href="#" onclick="showPage('shop');filterByTag('limited');toggleMobileMenu()">Limited Drops</a>
+      <a href="#" onclick="toggleTheme();toggleMobileMenu()">Light Mode</a>
+      <a href="#" onclick="openAuthModal('login');toggleMobileMenu()">Log In / Sign Up</a>
     </div>
   </nav>
 
@@ -174,6 +178,7 @@
           <label class="filter-check"><input type="checkbox" value="Sneakers" onchange="toggleFilter('category','Sneakers')"> Sneakers</label>
           <label class="filter-check"><input type="checkbox" value="Clothing" onchange="toggleFilter('category','Clothing')"> Clothing</label>
           <label class="filter-check"><input type="checkbox" value="Accessories" onchange="toggleFilter('category','Accessories')"> Accessories</label>
+          <label class="filter-check"><input type="checkbox" value="Kids" onchange="toggleFilter('category','Kids')"> Kids</label>
         </div>
 
         <div class="filter-group">
@@ -266,6 +271,61 @@
     </div>
   </div>
 
+  <!-- ===================== AUTH MODAL ===================== -->
+  <div class="modal-overlay" id="authModal" onclick="closeAuthModalOutside(event)">
+    <div class="modal-box auth-modal-box" id="authModalBox">
+      <button class="modal-close" onclick="closeAuthModal()">✕</button>
+      <div class="auth-modal-inner">
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="authTabLogin" onclick="switchAuthTab('login')">Login</button>
+          <button class="auth-tab" id="authTabSignup" onclick="switchAuthTab('signup')">Sign Up</button>
+        </div>
+        <div class="auth-panel auth-panel-login" id="authPanelLogin">
+          <form onsubmit="handleLogin(event)">
+            <div class="auth-field">
+              <label for="loginEmail">Email</label>
+              <input id="loginEmail" type="email" placeholder="you@example.com" required />
+            </div>
+            <div class="auth-field">
+              <label for="loginPassword">Password</label>
+              <input id="loginPassword" type="password" placeholder="Enter password" required />
+            </div>
+            <p class="auth-error" id="loginError"></p>
+            <button class="btn btn-primary" type="submit">Login</button>
+          </form>
+        </div>
+        <div class="auth-panel hidden auth-panel-signup" id="authPanelSignup">
+          <form onsubmit="handleSignup(event)">
+            <div class="auth-field">
+              <label for="signupName">Name</label>
+              <input id="signupName" type="text" placeholder="Your name" required />
+            </div>
+            <div class="auth-field">
+              <label for="signupEmail">Email</label>
+              <input id="signupEmail" type="email" placeholder="you@example.com" required />
+            </div>
+            <div class="auth-field">
+              <label for="signupPassword">Password</label>
+              <input id="signupPassword" type="password" placeholder="Create password" required />
+            </div>
+            <div class="auth-field">
+              <label for="signupConfirm">Confirm password</label>
+              <input id="signupConfirm" type="password" placeholder="Confirm password" required />
+            </div>
+            <p class="auth-error" id="signupError"></p>
+            <button class="btn btn-primary" type="submit">Sign Up</button>
+          </form>
+        </div>
+        <div class="auth-panel hidden auth-account" id="authAccountInfo">
+          <p class="auth-welcome">Signed in as</p>
+          <p class="auth-user-name" id="authUserName"></p>
+          <p class="auth-user-email" id="authUserEmail"></p>
+          <button class="btn btn-ghost" type="button" onclick="handleLogout()">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ===================== CART PANEL ===================== -->
   <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
   <div class="cart-panel" id="cartPanel">
@@ -282,9 +342,23 @@
     <div class="cart-footer" id="cartFooter">
       <div class="cart-total-row">
         <span>Subtotal</span>
+<<<<<<< HEAD
         <span id="cartTotal">CA$0.00</span>
       </div>
       <p class="cart-micro">Free delivery on orders over CA$75</p>
+=======
+        <span id="cartSubtotal">£0.00</span>
+      </div>
+      <div class="cart-shipping-options">
+        <label class="shipping-option"><input type="radio" name="shippingOption" value="pickup" checked onchange="setShippingOption('pickup')"> Pickup in Store — FREE</label>
+        <label class="shipping-option"><input type="radio" name="shippingOption" value="home" onchange="setShippingOption('home')"> Home Shipping — £4.99</label>
+      </div>
+      <div class="cart-total-row cart-total-final">
+        <span>Total</span>
+        <span id="cartTotal">£0.00</span>
+      </div>
+      <p class="cart-micro">Free pickup available. Home shipping adds £4.99.</p>
+>>>>>>> a347068987c3955a9b60db0e3cc3e73519ca1ebd
       <button class="btn btn-primary btn-checkout">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
         Secure Checkout
