@@ -37,7 +37,7 @@ body.light-mode {
 }
 
 body.light-mode .navbar {
-  background: rgba(255,255,255,0.95);
+  background: rgba(155, 153, 153, 0.95);
   border-color: var(--grey3);
 }
 
