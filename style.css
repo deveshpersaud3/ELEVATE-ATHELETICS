@@ -24,9 +24,9 @@
 }
 
 body.light-mode {
-  --bg: #747373;
-  --bg2: #747373;
-  --bg3: #757575;
+  --bg: #fefdfd;
+  --bg2: #fcfcfc;
+  --bg3: rgb(255, 255, 255), 255, 255);
   --bg4: #ffffff;
   --red: #FF2D20;
   --red-dark: #cc1f14;
