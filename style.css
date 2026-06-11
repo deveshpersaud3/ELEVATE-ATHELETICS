@@ -28,8 +28,8 @@ body.light-mode {
   --bg2: #ffffff;
   --bg3: #f0f0f0;
   --bg4: #ffffff;
-  --red: #b1271b;
-  --red-dark: #8f1c16;
+  --red: #FF2D20;
+  --red-dark: #cc1f14;
   --white: #111111;
   --grey1: #444444;
   --grey2: #666666;
@@ -107,6 +107,12 @@ body.light-mode .btn-primary {
 
 body.light-mode .btn-ghost {
   background: rgba(255,255,255,0.08);
+}
+
+body.light-mode .product-card .card-name,
+body.light-mode .product-card .card-price,
+body.light-mode .product-card .card-desc {
+  color: var(--red);
 }
 
 html { scroll-behavior: smooth; }
