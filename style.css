@@ -40,7 +40,6 @@ body.light-mode .navbar {
 body.light-mode .nav-links a,
 body.light-mode .nav-links a:hover,
 body.light-mode .auth-btn,
-body.light-mode .beat-btn,
 body.light-mode .theme-btn,
 body.light-mode .cart-btn {
   color: var(--white);
@@ -104,7 +103,7 @@ body.light-mode .btn-primary {
 body.light-mode .btn-ghost {
   background: rgba(255,255,255,0.08);
 }
-  --font-disp: 'Barlow Condensed', sans-serif;
+  --font-disp: 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
   --radius:    4px;
   --trans:     all 0.22s cubic-bezier(0.4,0,0.2,1);
@@ -196,21 +195,19 @@ button { cursor: pointer; font-family: var(--font-body); border: none; backgroun
   border-radius: 50%; transition: var(--trans);
 }
 .cart-btn:hover { background: var(--bg3); color: var(--red); }
-.auth-btn,
-.beat-btn {
+.auth-btn {
   color: var(--white);
   border: 1px solid var(--grey3);
   background: rgba(255,255,255,0.06);
   border-radius: 999px;
   padding: 10px 16px;
-  font-family: var(--font-disp);
+  font-family: var(--font-body);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   transition: var(--trans);
 }
-.auth-btn:hover,
-.beat-btn:hover {
+.auth-btn:hover {
   background: rgba(255,45,32,0.12);
   border-color: var(--red);
 }
