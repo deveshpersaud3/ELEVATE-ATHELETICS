@@ -16,7 +16,7 @@ const products = [
       { name: 'Midnight', value: '#1a1a1a' },
       { name: 'Bone', value: '#d9d2c8' },
     ],
-    sizes: [6, 7, 8, 9, 10, 11],
+    sizes: [6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14],
     reviews: [
       { author: 'Jordan', rating: 5, text: 'Comfortable straight out of the box and the grip is excellent.', date: '2 days ago' },
       { author: 'Mia', rating: 4.5, text: 'Runs true to size and looks sharper in person.', date: '1 week ago' },
@@ -66,7 +66,7 @@ const products = [
       { name: 'Graphite', value: '#2d2d2d' },
       { name: 'Silver', value: '#c8d0d8' },
     ],
-    sizes: [6, 7, 8, 9, 10, 11, 12],
+    sizes: [6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14],
     reviews: [
       { author: 'Noah', rating: 5, text: 'The cushioning is excellent and they feel stable at pace.', date: '3 days ago' },
       { author: 'Ella', rating: 4.5, text: 'A clean colourway that works with everything.', date: '5 days ago' },
@@ -266,7 +266,7 @@ const products = [
       { name: 'Black', value: '#111111' },
       { name: 'Red', value: '#ff2d20' },
     ],
-    sizes: [6, 7, 8, 9, 10, 11, 12],
+    sizes: [6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14],
     reviews: [
       { author: 'Nate', rating: 5, text: 'Clean, versatile and super easy to wear.', date: '5 days ago' },
       { author: 'Tia', rating: 4.5, text: 'A timeless shape with better cushioning than expected.', date: '1 week ago' },
@@ -326,7 +326,7 @@ function generateProducts(count, startId, forcedCategory = null) {
   const categories = ['Sneakers', 'Clothing', 'Accessories', 'Equipment', 'Kids'];
   const tagsPool = ['new', 'trending', 'best', 'sale', 'limited'];
   const sizeMap = {
-    Sneakers: [6, 7, 8, 9, 10, 11, 12],
+    Sneakers: [6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13, 13.5, 14],
     Clothing: ['S', 'M', 'L', 'XL', 'XXL'],
     Accessories: ['One Size'],
     Equipment: ['One Size'],
@@ -551,6 +551,8 @@ const refs = {};
 function cacheRefs() {
   refs.pageHome = document.getElementById('page-home');
   refs.pageShop = document.getElementById('page-shop');
+  refs.pageReviews = document.getElementById('page-reviews');
+  refs.reviewsFeed = document.getElementById('reviewsFeed');
   refs.trendingGrid = document.getElementById('trendingGrid');
   refs.newGrid = document.getElementById('newGrid');
   refs.bestGrid = document.getElementById('bestGrid');
@@ -575,6 +577,7 @@ function cacheRefs() {
   refs.hamburger = document.getElementById('hamburger');
   refs.authBtn = document.getElementById('authBtn');
   refs.authModal = document.getElementById('authModal');
+  refs.welcomeModal = document.getElementById('welcomeModal');
   refs.authTabLogin = document.getElementById('authTabLogin');
   refs.authTabSignup = document.getElementById('authTabSignup');
   refs.authPanelLogin = document.getElementById('authPanelLogin');
@@ -798,7 +801,7 @@ function handleSignup(event) {
   saveUser();
   updateAuthUI();
   closeAuthModal();
-  showToast('Account created successfully');
+  showWelcomeModal();
 }
 
 function handleLogout() {
@@ -808,10 +811,35 @@ function handleLogout() {
   showToast('Logged out');
 }
 
+function showWelcomeModal() {
+  if (refs.welcomeModal) {
+    refs.welcomeModal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeWelcomeModal() {
+  if (refs.welcomeModal) {
+    refs.welcomeModal.classList.remove('open');
+  }
+  document.body.style.overflow = '';
+}
+
+function closeWelcomeModalOutside(event) {
+  if (event.target === refs.welcomeModal) {
+    closeWelcomeModal();
+  }
+}
+
 function showPage(page) {
   state.currentPage = page;
   refs.pageHome.classList.toggle('active', page === 'home');
   refs.pageShop.classList.toggle('active', page === 'shop');
+  refs.pageReviews.classList.toggle('active', page === 'reviews');
+
+  if (page === 'reviews') {
+    renderReviewsPage();
+  }
 
   if (page === 'shop') {
     renderProducts();
@@ -1034,6 +1062,42 @@ function openProductModal(productId) {
   updateModalMainImage(product.gallery[0]);
   refs.modalOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+function renderReviewsPage() {
+  if (!refs.reviewsFeed) return;
+  
+  // Collect all reviews from products
+  const allReviews = [];
+  products.forEach(product => {
+    if (product.reviews && Array.isArray(product.reviews)) {
+      product.reviews.forEach(review => {
+        allReviews.push({
+          ...review,
+          productName: product.name,
+          productBrand: product.brand,
+        });
+      });
+    }
+  });
+  
+  // Shuffle and display reviews
+  const shuffled = allReviews.sort(() => Math.random() - 0.5);
+  const displayReviews = shuffled.slice(0, 50);
+  
+  refs.reviewsFeed.innerHTML = displayReviews.map(review => `
+    <div class="review-feed-item">
+      <div class="review-feed-header">
+        <div>
+          <div class="review-feed-author">${review.author}</div>
+          <div class="review-feed-date">${review.date}</div>
+        </div>
+        <div class="review-feed-rating">${'⭐'.repeat(Math.floor(review.rating))}${review.rating % 1 ? '⭐' : ''}</div>
+      </div>
+      <div class="review-feed-text">"${review.text}"</div>
+      <div style="margin-top: 12px; color: var(--grey2); font-size: 12px;">Reviewed: ${review.productBrand} ${review.productName}</div>
+    </div>
+  `).join('');
 }
 
 function renderModalGallery(product) {
@@ -1300,6 +1364,9 @@ window.switchAuthTab = switchAuthTab;
 window.handleLogin = handleLogin;
 window.handleSignup = handleSignup;
 window.handleLogout = handleLogout;
+window.showWelcomeModal = showWelcomeModal;
+window.closeWelcomeModal = closeWelcomeModal;
+window.closeWelcomeModalOutside = closeWelcomeModalOutside;
 window.toggleTheme = toggleTheme;
 window.addToCart = addToCart;
 window.changeCartQty = changeCartQty;
