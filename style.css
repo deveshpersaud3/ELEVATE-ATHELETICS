@@ -82,7 +82,7 @@ body.light-mode .product-card,
 body.light-mode .cart-item,
 body.light-mode .review-item,
 body.light-mode .auth-modal-box {
-  background: #7e7e7e;
+  background: #000000;
   border-color: var(--grey3);
 }
 
